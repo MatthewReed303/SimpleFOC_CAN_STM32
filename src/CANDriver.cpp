@@ -1,4 +1,5 @@
 #include "CANDriver.h"
+#include <vector>
 
 /*
  * CAN HAT:
@@ -69,7 +70,7 @@ uint8_t const * const CANDriver::floatToBytes(float *f) {
 uint8_t const * const CANDriver::doubleToBytes(double *d) {
     return (unsigned char const *)d;
 }
-uint8_t const * const CANDriver::intToBytes(int32_t *i) {
+uint8_t const * const CANDriver::intToBytes(int *i) {
     return (unsigned char const *)i;
 }
 

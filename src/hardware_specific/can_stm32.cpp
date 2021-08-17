@@ -1,7 +1,6 @@
 #include "Arduino.h" // Must be here for harware defines to be linked first
 #include "../can_api.h"
 #include "SimpleCAN.h"
-//#include "can_helper.h"
 
 #if defined(STM32F4xx)
 
