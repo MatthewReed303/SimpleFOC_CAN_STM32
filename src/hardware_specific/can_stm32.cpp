@@ -49,4 +49,9 @@ bool _receiveCAN(uint32_t *identifier, uint8_t *data, uint8_t *length) {
     return false;
 }
 
+void _getUniqueID(uint8_t * id) {
+	// set ID
+    
+}
+
 #endif

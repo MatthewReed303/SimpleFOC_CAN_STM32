@@ -4,5 +4,6 @@
 #include "CANDriver.h"
 #include "CANStream.h"
 #include "CANCommander.h"
+#include "hal_conf_extra.h"
 
 #endif
