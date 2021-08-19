@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Arduino.h"
-//#include "hal_conf_extra.h"
 #include "stm32f4xx_hal_can.h"
 
 // Value needed for prescaler. depends 

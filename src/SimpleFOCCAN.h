@@ -5,7 +5,5 @@
 #include "CANStream.h"
 #include "CANCommander.h"
 #include "SimpleCAN.h"
-#include "SimpleCAN_c.h"
-#include "hal_conf_extra.h"
 
 #endif
