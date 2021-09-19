@@ -10,9 +10,10 @@ SimpleCAN can;
 
 void _initCAN(int tx, int rx) {
     //Initialize configuration structures using macro initializers
-    can.init(tx, rx, BAUD_1M, CanMode::NormalCAN); 
+    can.init(tx, rx, BAUD_500K, CanMode::NormalCAN); 
     can.filterAcceptAll();
     can.begin();
+    
 }
 
 void _transmitCAN(uint32_t identifier, uint8_t *data, uint8_t length) {
@@ -28,9 +29,11 @@ void _transmitCAN(uint32_t identifier, uint8_t *data, uint8_t length) {
 
     //Queue message for transmission
     can.transmit(&message);
+    
 }
 
 bool _receiveCAN(uint32_t *identifier, uint8_t *data, uint8_t *length) {
+    
     can_message_t message;
     if (can.receive(&message) != CAN_OK) {
        return false; // no message
@@ -44,14 +47,16 @@ bool _receiveCAN(uint32_t *identifier, uint8_t *data, uint8_t *length) {
         *identifier = message.id;
         memcpy(data, message.data, message.dlc);
         *length = message.dlc;
+        
         return true;
     }
     return false;
+
 }
 
 void _getUniqueID(uint8_t * id) {
 	// set ID
-    
+
 }
 
 #endif

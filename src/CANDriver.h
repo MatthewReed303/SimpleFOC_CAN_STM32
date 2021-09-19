@@ -2,6 +2,7 @@
 #define CANDRIVER_H
 
 #include <map>
+#include <vector>
 
 #include "communication/Commander.h"
 #include "CANStream.h"
@@ -13,7 +14,7 @@ class CANDriver
     CANDriver(int tx, int rx);
     void transmit();
     void receive();
-    int32_t bytesToInt(uint8_t * bytes);
+    int bytesToInt(uint8_t * bytes);
     float bytesToFloat(uint8_t * bytes);
     double bytesToDouble(uint8_t * bytes);
     uint8_t const * const floatToBytes(float * f);
@@ -26,7 +27,7 @@ class CANDriver
     Commander command;
     uint32_t identifier;
     
-    uint16_t nodeId = 0;
+    uint16_t nodeId = 1;
     uint8_t uniqueId[6];
     uint8_t versionId[2] = {0, 1};
     uint16_t busIdRequestInterval = 3000;

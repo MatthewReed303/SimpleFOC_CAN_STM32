@@ -1,5 +1,5 @@
 #include "CANDriver.h"
-#include <vector>
+
 
 /*
  * CAN HAT:
@@ -34,6 +34,14 @@ CANDriver::CANDriver(int tx, int rx) {
     _getUniqueID(uniqueId);
 }
 
+int CANDriver::bytesToInt(uint8_t * bytes) {
+    static_assert(sizeof(int) == 4, "Int size expected to be 4 bytes");
+    int result;
+    memcpy(&result, bytes, 4);
+    return result;
+}
+
+/*
 int32_t CANDriver::bytesToInt(uint8_t * bytes) {
     union {
         int32_t i;
@@ -43,7 +51,14 @@ int32_t CANDriver::bytesToInt(uint8_t * bytes) {
         u.b[i] = bytes[i];
     return u.i;
 }
-
+*/
+float CANDriver::bytesToFloat(uint8_t * bytes) {
+    static_assert(sizeof(float) == 4, "float size expected to be 4 bytes");
+    float result;
+    memcpy(&result, bytes, 4);
+    return result;
+}
+/*
 float CANDriver::bytesToFloat(uint8_t * bytes) {
     union {
         float f;
@@ -53,7 +68,14 @@ float CANDriver::bytesToFloat(uint8_t * bytes) {
         u.b[i] = bytes[i];
     return u.f;
 }
-
+*/
+double CANDriver::bytesToDouble(uint8_t * bytes) {
+    static_assert(sizeof(double) == 8, "double size expected to be 8 bytes");
+    double result;
+    memcpy(&result, bytes, 8);
+    return result;
+}
+/*
 double CANDriver::bytesToDouble(uint8_t * bytes) {
     union {
         double d;
@@ -63,7 +85,7 @@ double CANDriver::bytesToDouble(uint8_t * bytes) {
         u.b[i] = bytes[i];
     return u.d;
 }
-
+*/
 uint8_t const * const CANDriver::floatToBytes(float *f) {
     return (unsigned char const *)f;
 }
@@ -129,7 +151,41 @@ void CANDriver::receive() {
         uint8_t command = getBits(identifier, 1);
         uint8_t motorID = getBits(identifier, 2);
         uint8_t busID = getBits(identifier, 3);
+        
+        Serial.println("Print Data For Can Frame");
+        Serial.println("Print Message Data");
+        Serial.println(data[0],HEX);
+        Serial.println(data[1],HEX);
+        Serial.println(data[2],HEX);
+        Serial.println(data[3],HEX);
+        Serial.println(data[4],HEX);
+        Serial.println(data[5],HEX);
+        Serial.println(data[6],HEX);
+        Serial.println(data[7],HEX);
+        //Serial.println(data[8],HEX);
 
+        Serial.println("Print Message Data bytes to Float");
+        float test_float;
+        test_float = bytesToFloat(data);
+        Serial.println(test_float);
+        Serial.println(test_float, HEX);
+        Serial.println(test_float, BIN);
+
+        Serial.println("Print Message Data bytes to Int");
+        int test_int;
+        test_int = bytesToInt(data);
+        Serial.println(test_int);
+        Serial.println(test_int, HEX);
+        Serial.println(test_int, BIN);
+
+        Serial.println("Print Message Data bytes to Double");
+        int test_double;
+        test_double = bytesToDouble(data);
+        Serial.println(test_double);
+        Serial.println(test_double, HEX);
+        Serial.println(test_double, BIN);
+        
+        
         // Is this a "Set Bus Id" command?
         if(nodeId == 0 && command == 0xF2 && dataType == 8) {
             if(data[0] == uniqueId[0] && data[1] == uniqueId[1] && data[2] == uniqueId[2] &&
@@ -141,8 +197,10 @@ void CANDriver::receive() {
 
         // Don't continue if the message is not for us
         if(busID != nodeId)
+        {
             return;
-
+        }
+        
         stream.dataType = stream.none;
         this->identifier = identifier;
         char textCommand[] = "\0\0\0\0";
@@ -165,7 +223,13 @@ void CANDriver::receive() {
                 }
             }
         }
-
+        //Serial.println("Print out TextCommand");
+        //Serial.println(textCommand[0]);
+        //Serial.println(textCommand[1]);
+        //Serial.println(textCommand[2]);
+        //Serial.println(textCommand[3]);
+        //Serial.println(textCommand[4]);
+        //Serial.println(textCommand[5]);
         switch(dataType) {
             case 0: // Get value
                 snprintf ( stream.value_buffer, 100, "%s%c", textCommand,this->command.eol );
@@ -185,7 +249,10 @@ void CANDriver::receive() {
         }
 
         stream.value_position = 0;
-        //printf("Commander format:\n%s",stream.value_buffer);
+        Serial.println("Stream Value Buffer");
+        Serial.println(stream.value_buffer);
+        Serial.printf("Commander format:\n%s",stream.value_buffer);
+        
     }
 }
 

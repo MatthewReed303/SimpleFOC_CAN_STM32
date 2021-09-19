@@ -82,21 +82,22 @@ CAN_Status SimpleCAN::transmit(can_message_t * message){
     CAN_TxHeaderTypeDef TxHeader;
     uint32_t TxMailbox;
     TxHeader.DLC = message->dlc;
-    TxHeader.StdId = message->id;
-    TxHeader.IDE = CAN_ID_STD;
+    TxHeader.ExtId = message->id;
+    TxHeader.IDE = CAN_ID_EXT;
     TxHeader.RTR = CAN_RTR_DATA;
 
     return static_cast<CAN_Status>(HAL_CAN_AddTxMessage(_hcan, &TxHeader, message->data, &TxMailbox)); 
 }
 
 CAN_Status SimpleCAN::receive(can_message_t * rxMessage) {
-
+  
   static uint8_t rxData[8]  = {0};
   static CAN_RxHeaderTypeDef rxHeader;
 
   CAN_Status status = static_cast<CAN_Status>(HAL_CAN_GetRxMessage(_hcan, CAN_RX_FIFO0, &rxHeader, rxData));
-
+  
   if (status == CAN_OK) {
+    
     rxMessage->dlc = rxHeader.DLC;
     rxMessage->id = rxHeader.IDE == CAN_ID_STD ? rxHeader.StdId : rxHeader.ExtId;
     rxMessage->isRTR = rxHeader.RTR;
